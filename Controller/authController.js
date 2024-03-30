@@ -10,12 +10,15 @@ export const signupUser = async (req, res) => {
         .status(400)
         .json({ error: "Password don't match, try again!!" });
     }
+    console.log("1");
     const user = await User.findOne({ username });
     console.log(user, "user");
     if (user) {
+      console.log("11");
       return res.status(400).json({ error: "Username already exists" });
     } else {
       //Hashed password
+      console.log("111");
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
       const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
@@ -28,11 +31,11 @@ export const signupUser = async (req, res) => {
         gender,
         profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
       });
-      console.log(newUser);
+      console.log(newUser, "new user");
       if (newUser) {
         console.log("newUsr", newUser._id);
         await generateTokenAndSaveToCookies(newUser._id, res);
-        console.log(req.cookies.jwt);
+        console.log(req.cookies.jwt, "req cookie");
         await newUser.save();
         res.status(201).json({
           _id: newUser._id,

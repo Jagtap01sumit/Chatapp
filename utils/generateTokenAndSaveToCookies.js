@@ -4,7 +4,7 @@ const generateTokenAndSaveToCookies = (userId, res) => {
   const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
     expiresIn: "15d",
   });
-  console.log(userId);
+  console.log(userId, "userid");
   console.log(token);
 
   res.cookie("jwt", token, {
@@ -13,6 +13,7 @@ const generateTokenAndSaveToCookies = (userId, res) => {
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production",
   });
+  console.log("save");
 };
 
 export default generateTokenAndSaveToCookies;
