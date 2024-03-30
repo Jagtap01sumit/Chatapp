@@ -7,9 +7,13 @@ import messageRoutes from "./Routes/messageRoutes.js";
 import userRouter from "./Routes/userRoutes.js";
 import connectDB from "./DB/connectDB.js";
 import { app, server } from "./socket/socket.js";
-import path from "path";
-import { allowedNodeEnvironmentFlags } from "process";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 app.use(
   cors({
@@ -18,12 +22,12 @@ app.use(
   })
 );
 
-// app.use("/public", express.static(path.join(__dirname, "/public")));
-// app.use(express.static(path.join(__dirname, "/public")));
+app.use("/public", express.static(join(__dirname, "/public")));
+app.use(express.static(join(__dirname, "/public")));
 const PORT = process.env.PORT || 5000;
 
 app.get("*", (req, res) => {
-  let url = path.join(__dirname, "/public/", "index.html");
+  let url = join(__dirname, "/public/", "index.html");
   res.sendFile(url);
 });
 app.use(express.json());
