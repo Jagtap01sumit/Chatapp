@@ -7,7 +7,8 @@ import messageRoutes from "./Routes/messageRoutes.js";
 import userRouter from "./Routes/userRoutes.js";
 import connectDB from "./DB/connectDB.js";
 import { app, server } from "./socket/socket.js";
-
+import path from "path";
+import { allowedNodeEnvironmentFlags } from "process";
 dotenv.config();
 
 app.use(
@@ -16,8 +17,15 @@ app.use(
     credentials: true,
   })
 );
+
+// app.use("/public", express.static(path.join(__dirname, "/public")));
+// app.use(express.static(path.join(__dirname, "/public")));
 const PORT = process.env.PORT || 5000;
 
+app.get("*", (req, res) => {
+  let url = path.join(__dirname, "/public/", "index.html");
+  res.sendFile(url);
+});
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api/auth", authRoutes);
